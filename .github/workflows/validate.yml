@@ -1,0 +1,35 @@
+name: Validate services (schema + build)
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        env:
+          RUAMEL_NO_EXTENSIONS: "1"   # avoid compiling C extensions
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run validator (schema + import/build)
+        # your validate.sh already validates YAML and generates the catalog
+        run: bash tools/validate.sh
