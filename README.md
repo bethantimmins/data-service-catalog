@@ -70,6 +70,22 @@ We also provide structured templates to make contributing smoother:
 Please follow these to help us keep contributions clear and consistent.
 
 ---
+## 🧪 Examples   👈 ***add this right here***
+
+New here? Start by looking at these examples:
+
+- **Good example** → [examples/good_service.yaml](examples/good_service.yaml)
+- **Bad example** → [examples/bad_service.yaml](examples/bad_service.yaml)
+
+Use the *good* example as a template for creating new service files.  
+Compare it with the *bad* example to help spot common mistakes!
+
+**How to add a new service**
+1. Copy `examples/good_service.yaml` into the `services/` folder and rename it (e.g. `services/my-service.yaml`).
+2. Fill in the fields (making sure they match the allowed schema values).
+3. Open a Pull Request—your CI will automatically validate your file before it goes live!
+   
+---
 ## 🔐 Security
 
 If you find a security vulnerability, please review our [SECURITY.md](SECURITY.md) for how to report it responsibly.  
