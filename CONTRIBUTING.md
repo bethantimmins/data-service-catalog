@@ -1,85 +1,109 @@
-# Contributing to Data Service Catalog
+ Contributing to Data Service Catalog
 
-Welcome! 👋  
-This repo publishes a **code-first data service catalogue**: each service is described in YAML, validated in CI, and rendered to a simple website (GitHub Pages).
+🎉 First off, thanks for taking the time to contribute! Your help makes this project better for everyone.
 
----
-
-## 🚀 Quick Start
-
-- **Small change?** Edit files in the GitHub UI and open a Pull Request (PR).
-- **Add a service?** Copy an existing file in `services/`, update fields, then open a PR.
-- **Validation is automatic** → GitHub Actions will run checks for you.
+This guide outlines how to contribute, the workflow we follow, and a few best practices.
 
 ---
 
-## 🗂 How the repo works
+## 🛠 Getting Started
 
-- **Service metadata** → `services/*.yml`
-- **Schema definition** → `catalog.schema.json` (defines required/optional fields)
-- **Validation** → `tools/validate.sh` builds `build/catalog.json`
-- **Website** → files in `docs/`, auto-published to  
-  👉 <https://bethantimmins.github.io/data-service-catalog/>
-
-A PR cannot be merged if validation fails (schema errors or broken build).
-
----
-
-## ✍️ Add or update a service
-
-1. Duplicate an existing YAML in `services/`:
-2. Fill in the fields (examples):
-- `name`: **Customer Orders Service**
-- `description`: Short, clear description
-- `owner`: Team name
-- `status`: Active / Deprecated / Planned
-- `sources`: URLs or upstream systems
-- `schema_uri`: optional pointer to Avro/JSON schema
-- `access`: how to consume (API, table, etc.)
-- `update_frequency`: real-time / hourly / daily
-- `business_purpose`: why it exists
-- `kpis`: list of key metrics
-- `quality`: e.g. `freshness_sla_min`, `completeness_target_pct`
-- `sensitivity`: Public / Internal / Restricted
-- `compliance`: GDPR / CCPA / etc.
-- `sla`: availability guarantees
-- `monitoring`: dashboards, alerting
-- `support`: contact
-- `tags`: labels for discovery
-- `code_object`: pipeline module (if any)
-
-3. Commit to a **new branch** and open a PR.
+1. **Fork the repo** on GitHub.
+2. **Clone your fork** locally:
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/data-service-catalog.git
+   ```
+3. **Create a branch** for your change:
+   ```bash
+   git checkout -b feature/my-new-service
+   ```
+4. Install dependencies (if any are required):
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ---
 
-## ✅ Validation
+## 💡 How to Contribute
 
-This repo uses a GitHub Action:  
-**Validate services (schema + build)**
-
-It ensures:
-- All YAML matches `catalog.schema.json`
-- A valid `build/catalog.json` is generated
-
-If validation fails:
-- Click into the Action run → see exact error & file/line
-- Fix locally or in the GitHub editor
-- Push changes → checks re-run automatically
+We welcome contributions in many forms:
+- Adding or updating services in `catalog.json`.
+- Improving validation or schema rules.
+- Enhancing the documentation or examples.
+- Fixing bugs or suggesting improvements.
+- Opening issues for bugs, questions, or feature ideas.
 
 ---
 
-## 🛠 Run locally (optional)
+## 🔎 Validation & Checks
 
-You don’t need to run locally — CI will catch issues.  
-But if you want to preview before pushing:
+Every contribution is automatically validated by **GitHub Actions**:
+- **Schema validation**: Ensures `catalog.json` follows the defined format.
+- **Build check**: Confirms files and docs render correctly.
+- **Pages deployment**: Makes sure the catalog is published.
 
-### Setup
-```bash
-./tools/validate.sh
-python3 -m venv .venv
-source .venv/bin/activate
+✅ Make sure your branch passes these checks before opening a Pull Request.
 
-# Avoid compiler prompts on macOS
-export RUAMEL_NO_EXTENSIONS=1
+---
 
-pip install -r requirements.txt
+## 📝 Commit Guidelines
+
+We use a simple, structured commit message format:
+
+```
+type: short description
+```
+
+Where `type` can be:
+- `feat`: a new feature
+- `fix`: a bug fix
+- `docs`: documentation updates
+- `chore`: repository setup, CI/CD, or non-feature changes
+
+Examples:
+```
+feat: add new Customer Orders service
+fix: correct schema validation error
+docs: update README with quickstart guide
+```
+
+---
+
+## 🔀 Pull Requests
+
+1. Push your branch to your fork.
+2. Open a **Pull Request** against the `main` branch.
+3. Make sure:
+   - Your PR passes all validation checks.
+   - The PR description clearly explains the change.
+   - Linked issues (if any) are referenced (e.g. `Closes #12`).
+
+We encourage small, focused PRs — easier to review and merge quickly!
+
+---
+
+## 🐛 Issues
+
+- Use issues to report bugs, request features, or ask questions.
+- Before opening a new issue, please check if it already exists.
+- Include clear steps to reproduce bugs if reporting one.
+
+---
+
+## 🤝 Community Guidelines
+
+- Be kind and respectful to others.
+- Offer constructive feedback.
+- Remember that this project is open source and built by volunteers.
+
+For more, see our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+---
+
+💡 **Tip:** If you’re new to open source, check out GitHub’s [first contributions guide](https://github.com/firstcontributions/first-contributions).
+
+---
+
+Thanks again for contributing! 🚀
+
+
