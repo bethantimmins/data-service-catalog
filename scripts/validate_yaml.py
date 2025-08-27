@@ -4,9 +4,15 @@ from pathlib import Path
 import yaml
 from jsonschema import validate, ValidationError
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+# Make path resolution rock-solid both locally and in GitHub Actions
+_ws = os.getenv("GITHUB_WORKSPACE")
+REPO_ROOT = Path(_ws) if _ws else Path(__file__).resolve().parents[1]
+
 SCHEMA_PATH = REPO_ROOT / "schemas" / "catalog.schema.json"
-SERVICES_GLOBS = [REPO_ROOT / "services" / "*.yml", REPO_ROOT / "services" / "*.yaml"]
+SERVICES_GLOBS = [
+    str(REPO_ROOT / "services" / "*.yml"),
+    str(REPO_ROOT / "services" / "*.yaml"),
+]
 BUILD_DIR = REPO_ROOT / "build"
 BUILD_JSON = BUILD_DIR / "catalog.json"
 
@@ -19,34 +25,40 @@ def load_yaml(p: Path):
         return yaml.safe_load(f) or {}
 
 def main():
-    # Load schema
+    # 1) Schema
     if not SCHEMA_PATH.exists():
         print(f"ERROR: Schema not found at {SCHEMA_PATH}", file=sys.stderr)
         sys.exit(1)
     schema = load_json(SCHEMA_PATH)
 
-    # Collect service files
+    # 2) Find service files (yml + yaml)
     service_files = []
     for g in SERVICES_GLOBS:
-        service_files.extend(sorted(glob.glob(str(g))))
+        service_files.extend(sorted(glob.glob(g)))
 
     if not service_files:
         print("No YAML files found under services/*.yml or *.yaml", file=sys.stderr)
         sys.exit(1)
 
-    print("=== Validating service YAML files against catalog.schema.json ===")
+    print("=== Validating service YAML files against schemas/catalog.schema.json ===")
+    print("Found files:")
+    for p in service_files:
+        rel = os.path.relpath(p, REPO_ROOT)
+        print(f" - {rel}")
+
+    # 3) Validate and collect
     all_valid = True
     services = []
 
     for p in service_files:
+        rel = os.path.relpath(p, REPO_ROOT)
         try:
             data = load_yaml(Path(p))
             validate(instance=data, schema=schema)
-            print(f"✅ {os.path.relpath(p, REPO_ROOT)} is valid")
+            print(f"✅ {rel} is valid")
             services.append(data)
         except ValidationError as e:
             all_valid = False
-            rel = os.path.relpath(p, REPO_ROOT)
             print(f"❌ {rel}: schema validation failed")
             print(f"   -> {e.message}")
 
@@ -54,12 +66,12 @@ def main():
         print("One or more service files failed validation. Aborting.", file=sys.stderr)
         sys.exit(2)
 
-    # Build output
+    # 4) Write a single aggregated JSON array
     BUILD_DIR.mkdir(parents=True, exist_ok=True)
     with BUILD_JSON.open("w", encoding="utf-8") as f:
         json.dump(services, f, indent=2, ensure_ascii=False)
+
     print(f"\nGenerated {os.path.relpath(BUILD_JSON, REPO_ROOT)} with {len(services)} services.")
 
 if __name__ == "__main__":
     main()
-)
