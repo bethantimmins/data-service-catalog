@@ -22,23 +22,57 @@
     <h1>Data Service Catalogue</h1>
     <p class="muted">Render of <span class="code">docs/catalog.json</span>. Replace the fetch path if hosting elsewhere.</p>
   </header>
+
   <main id="app">Loading...</main>
+
   <script>
+    function render(list) {
+      const app = document.getElementById('app');
+      app.innerHTML = '';
+      if (!Array.isArray(list) || list.length === 0) {
+        app.textContent = 'No services to display yet.';
+        return;
+      }
+      list.forEach(svc => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h2>${svc.name ?? ''}</h2>
+          <p>${svc.description ?? ''}</p>
+          <div>${(svc.tags ?? []).map(t => `<span class="pill">${t}</span>`).join('')}</div>
+          <p class="muted">Owner: ${svc.owner ?? '—'} • Status: ${svc.status ?? '—'} • Update: ${svc.update_frequency ?? '—'}</p>
+          <details><summary>Details</summary><pre class="code">${JSON.stringify(svc, null, 2)}</pre></details>
+        `;
+        app.appendChild(card);
+      });
+    }
+
     async function init(){
+      const app = document.getElementById('app');
       try {
-        const res = await fetch('./catalog.json');   // <-- same folder as index.html
-        const data = await res.json();
-        const app = document.getElementById('app');
-        app.innerHTML = '';
-        data.forEach(svc => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-            <h2>${svc.name}</h2>
-            <p>${svc.description || ''}</p>
-            <div>${(svc.tags||[]).map(t=>`<span class="pill">${t}</span>`).join('')}</div>
-            <p class="muted">Owner: ${svc.owner} • Status: ${svc.status} • Update: ${svc.update_frequency}</p>
-            <details><summary>Details</summary><pre class="code">${JSON.stringify(svc, null, 2)}</pre></details>
-          `;
-          app.appendChild(card);
-        });
+        // no-store avoids stale caches while Pages is updating
+        const res = await fetch('./catalog.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+        const raw = await res.json();
+
+        // Accept either an array or { services: [...] }
+        const data = Array.isArray(raw) ? raw : (raw.services ?? []);
+        render(data);
+      } catch (e) {
+        console.error('Failed to load catalog.json:', e);
+        app.textContent = `❌ Could not load docs/catalog.json — ${e.message}`;
+      }
+    }
+
+    // If nothing has changed after a short while, give a friendly nudge
+    setTimeout(() => {
+      const app = document.getElementById('app');
+      if (app && app.textContent.trim().toLowerCase() === 'loading...') {
+        app.textContent = 'Still loading… If this persists, ensure docs/catalog.json exists and is valid JSON.';
+      }
+    }, 2500);
+
+    init();
+  </script>
+</body>
+</html>
