@@ -1,23 +1,31 @@
 name: Payments API
-description: Authorizes and settles customer payments; emits transaction events.
 owner: Payments Team
-status: Beta
+status: In Development
+access:
+  - restricted
+  - role:payments-read
 update_frequency: real-time
-access: restricted
+sensitivity: Restricted
+sla: "99.95% availability; p95 auth latency ≤ 200ms"
+
+description: Authorizes and settles customer payments; emits transaction events.
 tags: [payments, finance, api, realtime]
 
-documentation: https://example.org/docs/payments
-source_repo: https://github.com/example/payments
-contact: payments@example.org
+business_purpose: Process and record customer payment transactions securely.
 
-endpoints:
-  - type: REST
-    url: https://api.example.org/payments
-    auth: mTLS
-  - type: Events
-    topic: kafka://events/payments.transactions.v2
+quality:
+  freshness_sla_min: 1
+  completeness_target_pct: 99.9
 
 compliance:
-  pii: true
-  regimes: [PCI-DSS]
-  note: Use tokenized PAN only; no raw card data in analytics zones.
+  - PCI-DSS
+  - SOC2
+
+monitoring:
+  - "Dashboard: Grafana › Payments API"
+  - "Alert: Error rate > 0.5% for 5m"
+
+support: "payments@example.org"
+sources:
+  - core.payments
+  - auth.gateway
