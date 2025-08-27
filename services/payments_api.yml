@@ -2,7 +2,7 @@ name: Payments API
 owner: Payments Team
 status: In Development
 access:
-  - restricted
+  - Restricted
   - role:payments-read
 update_frequency: real-time
 sensitivity: Restricted
