@@ -1,6 +1,7 @@
 {
+  "$id": "https://bethantimmins.github.io/data-service-catalog/schemas/catalog.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Data Service Catalogue Entry",
+  "title": "Data Service Catalog - Service Schema",
   "type": "object",
   "required": [
     "name",
