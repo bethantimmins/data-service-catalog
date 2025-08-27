@@ -1,4 +1,4 @@
-import sys, json, glob, yaml
+import os, sys, json, glob, yaml
 from jsonschema import validate, ValidationError
 
 def main():
