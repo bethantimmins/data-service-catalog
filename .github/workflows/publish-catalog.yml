@@ -28,7 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Validate & build (build/catalog.json)
+           - name: Validate & build (build/catalog.json)
         run: |
           chmod +x tools/validate.sh || true
           tools/validate.sh
@@ -38,23 +38,14 @@ jobs:
           mkdir -p docs
           cp -f build/catalog.json docs/catalog.json
 
-      - name: Commit docs/catalog.json if changed
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          # Only stage what the site uses
-          git add -A docs/catalog.json
-
-          # Helpful debug
-          git status --porcelain
-          git diff --stat --cached || true
-
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-          else
-            git commit -m "chore: update docs/catalog.json from services/*"
-            git push origin HEAD:main
-          fi
+      - name: Open PR with updated catalog.json
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore: update docs/catalog.json from services/*"
+          branch: auto/catalog-update
+          title: "chore: publish updated catalog.json"
+          body: |
+            Auto-generated PR updating **docs/catalog.json** from files in `services/`.
+            Merges will trigger Pages to publish the changes.
+          add-paths: |
+            docs/catalog.json
