@@ -71,7 +71,7 @@ YAML (services/*.yaml)
                 └─ build → build/catalog.json
                         └─ copy → docs/catalog.json
                                 └─ GitHub Pages site (browse/search)
-
+```
 ---
 ## 🤝 Contributing
 
