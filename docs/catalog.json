@@ -38,7 +38,115 @@
       "orders",
       "api",
       "curated"
+    ]
+  },
+  {
+    "name": "Marketing Events Lake",
+    "owner": "Marketing Analytics",
+    "status": "Active",
+    "access": [
+      "internal"
     ],
-    "code_object": "pipelines.customer_orders.customer_orders_pipeline"
+    "update_frequency": "daily",
+    "sensitivity": "Internal",
+    "sla": "Available by 07:00 UTC next day",
+    "description": "Curated analytics-ready table for web/app events (sessions, campaigns, attribution).",
+    "tags": [
+      "marketing",
+      "events",
+      "analytics",
+      "curated"
+    ],
+    "business_purpose": "Attribution and funnel analytics for campaign performance.",
+    "quality": {
+      "freshness_sla_min": 420,
+      "completeness_target_pct": 98.5
+    },
+    "kpis": [
+      "Attribution join success ≥ 98%",
+      "Event timestamp completeness ≥ 99.5%"
+    ],
+    "sources": [
+      "web_tracking_raw",
+      "mobile_events_raw"
+    ],
+    "monitoring": [
+      "Alert: Daily load missing by 08:00 UTC"
+    ],
+    "support": "marketing-analytics@example.org"
+  },
+  {
+    "name": "Payments API",
+    "owner": "Payments Team",
+    "status": "In Development",
+    "access": [
+      "Restricted",
+      "role:payments-read"
+    ],
+    "update_frequency": "real-time",
+    "sensitivity": "Restricted",
+    "sla": "99.95% availability; p95 auth latency ≤ 200ms",
+    "description": "Authorizes and settles customer payments; emits transaction events.",
+    "tags": [
+      "payments",
+      "finance",
+      "api",
+      "realtime"
+    ],
+    "business_purpose": "Process and record customer payment transactions securely.",
+    "quality": {
+      "freshness_sla_min": 1,
+      "completeness_target_pct": 99.9
+    },
+    "compliance": [
+      "PCI-DSS",
+      "SOC2"
+    ],
+    "monitoring": [
+      "Dashboard: Grafana › Payments API",
+      "Alert: Error rate > 0.5% for 5m"
+    ],
+    "support": "payments@example.org",
+    "sources": [
+      "core.payments",
+      "auth.gateway"
+    ]
+  },
+  {
+    "name": "Product Catalog Service",
+    "owner": "Data Platform Team",
+    "status": "Active",
+    "access": [
+      "Internal"
+    ],
+    "update_frequency": "hourly",
+    "sensitivity": "Internal",
+    "sla": "99.9% availability; ≤60 min freshness during business hours",
+    "description": "Central source of truth for product data (names, categories, pricing, availability).",
+    "tags": [
+      "product",
+      "catalog",
+      "api",
+      "curated"
+    ],
+    "business_purpose": "Enable consistent product information across apps and analytics.",
+    "kpis": [
+      "Price completeness ≥ 99%",
+      "SKU coverage ≥ 99.5%"
+    ],
+    "quality": {
+      "freshness_sla_min": 60,
+      "completeness_target_pct": 99.0
+    },
+    "sources": [
+      "mdm.products",
+      "pricing.rules"
+    ],
+    "monitoring": [
+      "Dashboard: Grafana › Product Catalog",
+      "Alert: Freshness > 60m"
+    ],
+    "support": "data-platform@example.org",
+    "schema_uri": "https://example.org/schemas/product-catalog.json"
   }
 ]
