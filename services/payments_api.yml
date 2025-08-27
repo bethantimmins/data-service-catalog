@@ -1,0 +1,23 @@
+name: Payments API
+description: Authorizes and settles customer payments; emits transaction events.
+owner: Payments Team
+status: Beta
+update_frequency: real-time
+access: restricted
+tags: [payments, finance, api, realtime]
+
+documentation: https://example.org/docs/payments
+source_repo: https://github.com/example/payments
+contact: payments@example.org
+
+endpoints:
+  - type: REST
+    url: https://api.example.org/payments
+    auth: mTLS
+  - type: Events
+    topic: kafka://events/payments.transactions.v2
+
+compliance:
+  pii: true
+  regimes: [PCI-DSS]
+  note: Use tokenized PAN only; no raw card data in analytics zones.
