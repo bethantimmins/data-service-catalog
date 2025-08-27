@@ -1,11 +1,22 @@
 name: Build & publish catalog.json for Pages
 
 on:
+  # still allows you to run it manually from the Actions tab
   workflow_dispatch:
+  # auto-run whenever a service YAML changes
+  push:
+    paths:
+      - "services/**/*.yaml"
+      - "services/**/*.yml"
 
+# the workflow will create a commit & PR on your repo
 permissions:
-  contents: write      # allow committing files
-  pull-requests: write # allow opening PRs
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: catalog-publish
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -37,6 +48,7 @@ jobs:
           mkdir -p docs
           cp -f build/catalog.json docs/catalog.json
 
+      # IMPORTANT: Create a PR (don’t push to main directly, since your branch rules require PRs)
       - name: Open PR with updated catalog.json
         uses: peter-evans/create-pull-request@v6
         with:
@@ -45,6 +57,8 @@ jobs:
           title: "chore: publish updated catalog.json"
           body: |
             Auto-generated PR updating **docs/catalog.json** from files in `services/`.
-            Merging this PR will trigger GitHub Pages to publish the changes.
+            Merging this will publish the changes to GitHub Pages.
           add-paths: |
             docs/catalog.json
+          delete-branch: true
+          labels: automated
