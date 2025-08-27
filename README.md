@@ -70,7 +70,7 @@ We also provide structured templates to make contributing smoother:
 Please follow these to help us keep contributions clear and consistent.
 
 ---
-## 🧪 Examples   👈 ***add this right here***
+## 🧪 Examples
 
 New here? Start by looking at these examples:
 
