@@ -1,0 +1,20 @@
+# ✅ Example of a *good* service definition
+# Tip: keep indentation with 2 spaces (no tabs)
+name: customer-orders-service
+title: Customer Orders Service
+description: Provides access to customer purchase history for analytics and apps.
+owner: Data Platform Team
+status: Active            # e.g. Active | Deprecated | Draft (match your schema values)
+update: real-time         # e.g. real-time | hourly | daily | weekly
+url: https://example.org/orders
+tags:
+  - customer
+  - orders
+  - api
+  - curated
+# Add any other fields your schema supports below (remove if not applicable)
+# docs: https://example.org/docs/orders
+# runbook: https://example.org/runbooks/orders
+# contacts:
+#   - name: Oncall
+#     email: oncall@example.org
