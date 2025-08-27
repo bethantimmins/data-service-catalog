@@ -9,28 +9,152 @@
   <link rel="icon" href="favicon.ico" type="image/x-icon">
 
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 2rem; }
-    header { margin-bottom: 1rem; }
-    .card { border: 1px solid #e3e3e3; border-radius: 12px; padding: 1rem; margin: 0.75rem 0; }
-    .pill { display:inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; background:#f1f5f9; margin-right:0.35rem; font-size: 12px; }
-    .muted { color: #666; font-size: 14px; }
+    :root{
+      --brand: #0f172a;        /* slate-900 */
+      --brand-accent: #2563eb; /* blue-600 */
+      --ink: #0f172a;
+      --muted: #64748b;        /* slate-500 */
+      --card: #ffffff;
+      --border: #e5e7eb;       /* gray-200 */
+      --pill: #f1f5f9;         /* slate-100 */
+      --bg: #ffffff;
+      --maxw: 1100px;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+    }
+    .bar {
+      background: linear-gradient(90deg, var(--brand), #111827);
+      color: #fff;
+      padding: 28px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .container { max-width: var(--maxw); margin: 0 auto; padding: 0 16px; }
+    .brand {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .brand-logo {
+      width: 28px; height: 28px; display: grid; place-items: center;
+      background: var(--brand-accent); border-radius: 8px; font-weight: 700;
+      font-size: 12px; letter-spacing: .5px;
+    }
+    .brand h1 {
+      margin: 0; font-size: clamp(22px, 3.5vw, 28px); font-weight: 750;
+    }
+    .brand p { margin: 4px 0 0; color: #cbd5e1; }
+    main { padding: 24px 0 48px; }
+    .muted { color: var(--muted); font-size: 14px; }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin: 12px 0;
+      background: var(--card);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+    }
+    .pill {
+      display: inline-block; padding: 0.15rem 0.5rem;
+      border-radius: 999px; background: var(--pill);
+      margin-right: 0.35rem; font-size: 12px;
+    }
     .code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    details summary { cursor: pointer; }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 18px 0; color: var(--muted); font-size: 14px;
+    }
+    .link { color: var(--brand-accent); text-decoration: none; }
+    .link:hover { text-decoration: underline; }
+    .empty {
+      text-align: center; padding: 64px 18px; border: 1px dashed var(--border);
+      border-radius: var(--radius); color: var(--muted);
+    }
+    .cta {
+      display: inline-block; margin-top: 12px; background: var(--brand-accent);
+      color: #fff; padding: 8px 12px; border-radius: 10px; text-decoration: none;
+      font-weight: 600;
+    }
+    .cta:hover { filter: brightness(.95); }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Data Service Catalogue</h1>
-    <p class="muted">Render of <span class="code">docs/catalog.json</span>. Replace the fetch path if hosting elsewhere.</p>
-  </header>
+  <!-- Brand/Header -->
+  <div class="bar">
+    <div class="container">
+      <div class="brand">
+        <div class="brand-logo">DC</div>
+        <div>
+          <h1>Data Service Catalogue</h1>
+          <p>Code-first, schema-validated, and auto-published.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <main id="app">Loading...</main>
+  <!-- Body -->
+  <div class="container">
+    <p class="muted" style="margin:18px 0 8px;">
+      Render of <span class="code">docs/catalog.json</span>. Replace the fetch path if hosting elsewhere.
+    </p>
+
+    <main id="app">Loading...</main>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <span id="last-updated"></span>
+      ·
+      <a class="link" id="repo-link" href="https://github.com/bethantimmins/data-service-catalog" target="_blank" rel="noopener">GitHub repo</a>
+      ·
+      <a class="link" href="https://github.com/bethantimmins/data-service-catalog/issues/new/choose" target="_blank" rel="noopener">Open an issue</a>
+    </div>
+  </footer>
 
   <script>
+    const REPO_URL = "https://github.com/bethantimmins/data-service-catalog";
+
+    function isObject(v){ return v && typeof v === 'object' && !Array.isArray(v); }
+
+    // Try to find a reasonable array of services from various shapes
+    function normalize(raw){
+      if (Array.isArray(raw)) return raw;
+      const keys = ['services','items','data','entries','catalog','records'];
+      if (isObject(raw)) {
+        for (const k of keys) if (Array.isArray(raw[k])) return raw[k];
+        if ('name' in raw || 'owner' in raw || 'status' in raw) return [raw];
+        const seen = new Set();
+        function findArrayOfObjects(obj){
+          if (!isObject(obj) || seen.has(obj)) return null;
+          seen.add(obj);
+          for (const v of Object.values(obj)){
+            if (Array.isArray(v) && v.length && typeof v[0] === 'object') return v;
+            if (isObject(v)){ const f = findArrayOfObjects(v); if (f) return f; }
+          }
+          return null;
+        }
+        const found = findArrayOfObjects(raw);
+        if (found) return found;
+      }
+      return [];
+    }
+
     function render(list) {
       const app = document.getElementById('app');
       app.innerHTML = '';
       if (!Array.isArray(list) || list.length === 0) {
-        app.textContent = 'No services to display yet.';
+        app.innerHTML = `
+          <div class="empty">
+            <div style="font-size:18px; font-weight:700; margin-bottom:8px;">No services found yet</div>
+            <div>Add your first file in <span class="code">services/your-service.yml</span> and push.</div>
+            <a class="cta" href="${REPO_URL}#examples" target="_blank" rel="noopener">See examples</a>
+          </div>
+        `;
         return;
       }
       list.forEach(svc => {
@@ -50,13 +174,17 @@
     async function init(){
       const app = document.getElementById('app');
       try {
-        // no-store avoids stale caches while Pages is updating
         const res = await fetch('./catalog.json', { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
         const raw = await res.json();
 
-        // Accept either an array or { services: [...] }
-        const data = Array.isArray(raw) ? raw : (raw.services ?? []);
+        // Update "last updated" from catalog file's build time if present, else now
+        const lastEl = document.getElementById('last-updated');
+        const builtAt = (isObject(raw) && (raw.generated_at || raw.built_at)) || null;
+        const when = builtAt ? new Date(builtAt) : new Date();
+        lastEl.textContent = `Last updated: ${when.toLocaleString()}`;
+
+        const data = normalize(raw);
         render(data);
       } catch (e) {
         console.error('Failed to load catalog.json:', e);
@@ -64,13 +192,16 @@
       }
     }
 
-    // If nothing has changed after a short while, give a friendly nudge
+    // Friendly nudge if it hangs
     setTimeout(() => {
       const app = document.getElementById('app');
       if (app && app.textContent.trim().toLowerCase() === 'loading...') {
         app.textContent = 'Still loading… If this persists, ensure docs/catalog.json exists and is valid JSON.';
       }
     }, 2500);
+
+    // Set repo link just in case we change URL above
+    document.getElementById('repo-link').href = REPO_URL;
 
     init();
   </script>
