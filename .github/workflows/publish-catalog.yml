@@ -28,7 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-           - name: Validate & build (build/catalog.json)
+      - name: Validate & build (build/catalog.json)
         run: |
           chmod +x tools/validate.sh || true
           tools/validate.sh
@@ -46,6 +46,6 @@ jobs:
           title: "chore: publish updated catalog.json"
           body: |
             Auto-generated PR updating **docs/catalog.json** from files in `services/`.
-            Merges will trigger Pages to publish the changes.
+            Merging this PR updates the published site.
           add-paths: |
             docs/catalog.json
