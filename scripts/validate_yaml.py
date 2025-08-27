@@ -2,7 +2,17 @@ import os, sys, json, glob, yaml
 from jsonschema import validate, ValidationError
 
 def main():
-    schema = json.load(open("catalog.schema.json"))
+        # Resolve schema path relative to the repo root
+    this_dir = os.path.dirname(os.path.abspath(__file__))           # .../scripts
+    repo_root = os.path.dirname(this_dir)                           # go up to repo root
+    schema_path = os.path.join(repo_root, "schemas", "catalog.schema.json")
+
+    if not os.path.exists(schema_path):
+        raise FileNotFoundError(f"Schema not found at: {schema_path}")
+
+    with open(schema_path, "r", encoding="utf-8") as f:
+        schema = json.load(f)
+
     files = sys.argv[1:] or glob.glob("services/*.yml")
     if not files:
         print("No YAML files found in services/*.yml")
