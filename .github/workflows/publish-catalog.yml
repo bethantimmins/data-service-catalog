@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: write      # allow committing files
+  pull-requests: write # allow opening PRs
 
 jobs:
   build:
@@ -16,7 +16,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -46,6 +45,6 @@ jobs:
           title: "chore: publish updated catalog.json"
           body: |
             Auto-generated PR updating **docs/catalog.json** from files in `services/`.
-            Merging this PR updates the published site.
+            Merging this PR will trigger GitHub Pages to publish the changes.
           add-paths: |
             docs/catalog.json
