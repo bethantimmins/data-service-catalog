@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <title>Data Service Catalogue</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
   <style>
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 2rem; }
     header { margin-bottom: 1rem; }
@@ -38,13 +42,3 @@
           `;
           app.appendChild(card);
         });
-      } catch(e){
-        document.getElementById('app').textContent =
-          'Could not load docs/catalog.json. Make sure it exists in docs/, then commit & push.';
-      }
-    }
-    init();
-  </script>
-</body>
-</html>
-
