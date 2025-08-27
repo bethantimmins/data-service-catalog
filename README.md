@@ -54,6 +54,23 @@ build/catalog.json  # Generated metadata (do not edit by hand)
 docs/               # Serves as the GitHub Pages site
 scripts/            # Python logic behind validation and generation
 ```
+---
+## 🧭 How it works
+
+This repo turns simple YAML files into a browsable website of services.
+
+1. You add or edit service files in `services/*.yaml`
+2. We validate them against `schemas/catalog.schema.json`
+3. We generate `build/catalog.json`
+4. CI copies it to `docs/catalog.json`
+5. GitHub Pages serves it at the project website
+
+```text
+YAML (services/*.yaml)
+        └─ validate (schemas/catalog.schema.json)
+                └─ build → build/catalog.json
+                        └─ copy → docs/catalog.json
+                                └─ GitHub Pages site (browse/search)
 
 ---
 ## 🤝 Contributing
