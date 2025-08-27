@@ -2,7 +2,7 @@ name: Product Catalog Service
 owner: Data Platform Team
 status: Active
 access:
-  - internal
+  - Internal
 update_frequency: hourly
 sensitivity: Internal
 sla: "99.9% availability; ≤60 min freshness during business hours"
