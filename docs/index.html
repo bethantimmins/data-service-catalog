@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Data Service Catalogue</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 2rem; }
+    header { margin-bottom: 1rem; }
+    .card { border: 1px solid #e3e3e3; border-radius: 12px; padding: 1rem; margin: 0.75rem 0; }
+    .pill { display:inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; background:#f1f5f9; margin-right:0.35rem; font-size: 12px; }
+    .muted { color: #666; font-size: 14px; }
+    .code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Data Service Catalogue</h1>
+    <p class="muted">Render of <span class="code">build/catalog.json</span>. Replace the fetch path if hosting elsewhere.</p>
+  </header>
+  <main id="app">Loading...</main>
+  <script>
+    async function init(){
+      try {
+        const res = await fetch('../build/catalog.json');
+        const data = await res.json();
+        const app = document.getElementById('app');
+        app.innerHTML = '';
+        data.forEach(svc => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <h2>${svc.name}</h2>
+            <p>${svc.description || ''}</p>
+            <div>${(svc.tags||[]).map(t=>`<span class="pill">${t}</span>`).join('')}</div>
+            <p class="muted">Owner: ${svc.owner} • Status: ${svc.status} • Update: ${svc.update_frequency}</p>
+            <details><summary>Details</summary><pre class="code">${JSON.stringify(svc, null, 2)}</pre></details>
+          `;
+          app.appendChild(card);
+        });
+      } catch(e){
+        document.getElementById('app').textContent = 'Could not load catalog.json. Run build first.';
+      }
+    }
+    init();
+  </script>
+</body>
+</html>

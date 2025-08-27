@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Data Service Catalogue Entry",
+  "type": "object",
+  "required": [
+    "name",
+    "owner",
+    "status",
+    "access",
+    "update_frequency",
+    "sensitivity",
+    "sla"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Deprecated",
+        "In Development"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "schema_uri": {
+      "type": "string"
+    },
+    "access": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "update_frequency": {
+      "type": "string"
+    },
+    "business_purpose": {
+      "type": "string"
+    },
+    "kpis": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "quality": {
+      "type": "object",
+      "properties": {
+        "freshness_sla_min": {
+          "type": "number"
+        },
+        "completeness_target_pct": {
+          "type": "number"
+        }
+      }
+    },
+    "sensitivity": {
+      "type": "string",
+      "enum": [
+        "Public",
+        "Internal",
+        "Confidential",
+        "Restricted"
+      ]
+    },
+    "compliance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sla": {
+      "type": "string"
+    },
+    "monitoring": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "support": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

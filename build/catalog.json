@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Customer Orders Service",
+    "description": "Provides access to customer purchase history for analytics and apps.",
+    "owner": "Data Platform Team",
+    "status": "Active",
+    "sources": [
+      "postgres://analytics/orders_db",
+      "https://api.example.com/orders"
+    ],
+    "schema_uri": "schemas/customer_orders.avsc",
+    "access": [
+      "REST: https://api.example.com/v1/customer-orders",
+      "Warehouse view: ANALYTICS.CURATED.CUSTOMER_ORDERS"
+    ],
+    "update_frequency": "real-time",
+    "business_purpose": "Sales dashboards, retention modelling, order lookups",
+    "kpis": [
+      "Revenue",
+      "Average Order Value"
+    ],
+    "quality": {
+      "freshness_sla_min": 5,
+      "completeness_target_pct": 95
+    },
+    "sensitivity": "Restricted",
+    "compliance": [
+      "GDPR"
+    ],
+    "sla": "99.9% uptime",
+    "monitoring": [
+      "Observability dashboard: https://observability.example.com/d/orders",
+      "Alerts: on-call rotations via pager"
+    ],
+    "support": "support@example.com",
+    "tags": [
+      "customer",
+      "orders",
+      "api",
+      "curated"
+    ],
+    "code_object": "pipelines.customer_orders.customer_orders_pipeline"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "CustomerOrder",
+  "namespace": "example.analytics",
+  "fields": [
+    {"name": "order_id", "type": "string"},
+    {"name": "customer_id", "type": "string"},
+    {"name": "order_ts", "type": "string"},
+    {"name": "currency", "type": "string"},
+    {"name": "amount", "type": ["null","double"], "default": null}
+  ]
+}
