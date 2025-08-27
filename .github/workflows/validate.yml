@@ -41,3 +41,9 @@ jobs:
       - name: Run validator (schema + import/build)
         # your validate.sh already validates YAML and generates the catalog
         run: bash tools/validate.sh
+        
+      - name: Copy build → docs
+        run: |
+          mkdir -p docs
+          cp -f build/catalog.json docs/catalog.json
+
