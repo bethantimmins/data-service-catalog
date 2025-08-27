@@ -16,13 +16,13 @@
 <body>
   <header>
     <h1>Data Service Catalogue</h1>
-    <p class="muted">Render of <span class="code">build/catalog.json</span>. Replace the fetch path if hosting elsewhere.</p>
+    <p class="muted">Render of <span class="code">docs/catalog.json</span>. Replace the fetch path if hosting elsewhere.</p>
   </header>
   <main id="app">Loading...</main>
   <script>
     async function init(){
       try {
-        const res = await fetch('../build/catalog.json');
+        const res = await fetch('../docs/catalog.json');
         const data = await res.json();
         const app = document.getElementById('app');
         app.innerHTML = '';
