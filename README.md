@@ -1,75 +1,75 @@
-# Code-First Data Service Catalogue
+[![Validate services (schema + build)](https://github.com/bethantimmins/data-service-catalog/actions/workflows/validate.yml/badge.svg)](https://github.com/bethantimmins/data-service-catalog/actions/workflows/validate.yml)
 
-A lightweight, **code-first metadata pattern** for data teams. Describe each data service or pipeline in a small YAML file, register it via a decorator, validate in CI, and publish a machine-readable catalogue.
+# Data Service Catalog (Open Source Starter)
 
-> **Why?** Discoverability, governance, and reuse — without heavy platforms or manual wikis.
-
-## ✨ Features
-- In-repo YAML per service (human-friendly, versioned)
-- **Decorator** registers metadata from code at import time
-- **JSON Schema** validation (CI + pre-commit)
-- Auto-generate `build/catalog.json` for portals or downstream catalogs
-- Example pipeline and schema to copy-paste
-
-## 🚀 Quickstart
-```bash
-git clone <your-fork-url>
-cd data-service-catalog-oss-starter
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-bash tools/validate.sh
-cat build/catalog.json
-```
-
-## 🧱 Project Layout
-```
-services/           # YAML descriptors (one per service)
-schemas/            # Interface/data schemas (Avro/OpenAPI/etc.)
-lib/                # Catalog decorator & telemetry helpers
-pipelines/          # Example pipeline(s) that register services
-tools/              # CI/validation scripts
-scripts/            # Helpers to build the catalog
-tests/              # Minimal tests
-.github/            # CI, issue + PR templates
-docs/               # Optional docs site content
-```
-
-## 🛠 Define a Service
-Create `services/customer_orders.yml` and fill it out. Then decorate your pipeline:
-
-```python
-from lib.catalog import register_service
-
-@register_service("services/customer_orders.yml")
-def customer_orders_pipeline(run_date=None):
-    # your ETL/ELT logic here
-    return "ok"
-```
-
-## 🧪 Validate & Build
-```bash
-bash tools/validate.sh    # validate YAML and emit build/catalog.json
-pytest -q                  # optional tests
-```
-
-## 📦 Integrate Elsewhere
-- Publish `build/catalog.json` to S3/GCS/Blob storage
-- Feed it into **DataHub** / **OpenMetadata** with a small emitter
-- Render a simple UI (docs/ includes a minimal HTML viewer example)
-
-## 🔒 Notes
-- The example entries use **placeholders** (e.g., domains like `example.com`). Replace with your real endpoints.
-- Avoid committing secrets. See `.gitignore` suggestions below.
-
-## 📄 License
-Apache-2.0 (see `LICENSE`).
+A curated, open-source **Data Service Catalog** built with code-first metadata, automatic validation, and a lightweight web viewer.
 
 ---
 
-### README Badges (optional)
-Add these once you enable Actions & Releases:
+## 📖 About
+
+This repository helps teams build and maintain a consistent, discoverable catalog of data services. Each service is described in **YAML**, validated by schema, and surfaced via a static site hosted on GitHub Pages.
+
+Think of it as a **self-updating directory** of your organization's data services—keep it accurate and accessible with minimal effort.
+
+---
+
+## 🚀 Quick Start (for Contributors)
+
+### 1. Add or update a service
+Copy and customize a file from `services/`, e.g.:
+
+```bash
+cp services/customer_orders.yml services/my_new_service.yml
 ```
-![CI](https://img.shields.io/github/actions/workflow/status/<owner>/<repo>/ci.yml?branch=main)
-![License](https://img.shields.io/badge/license-Apache--2.0-blue)
-![SemVer](https://img.shields.io/badge/semver-yes-brightgreen)
+
+Update fields like `name`, `description`, `owner`, `status`, `access`, `tags`, and anything else relevant.
+
+### 2. Run validations (optional but highly recommended)
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+export RUAMEL_NO_EXTENSIONS=1
+pip install -r requirements.txt
+./tools/validate.sh
+python3 -m http.server 8000  # then open http://localhost:8000/docs/
 ```
+
+### 3. Push changes & open a Pull Request
+
+- Create a PR against `main`.
+- The **Validate services** workflow will run automatically.
+- Once it passes, you’re good to merge!
+
+---
+
+## 📂 Project Structure
+
+```
+services/           # Service-specific YAML definitions
+catalog.schema.json # Validation schema for services
+tools/validate.sh   # Runs validation + builds catalog.json
+build/catalog.json  # Generated metadata (do not edit by hand)
+docs/               # Serves as the GitHub Pages site
+scripts/            # Python logic behind validation and generation
+```
+
+---
+
+## 🔑 For Maintainers
+
+- **Update `catalog.schema.json`** when adding or changing metadata fields.
+- **Review PRs carefully**, ensuring metadata stays consistent and validation is green.
+- **Encourage contributors** to run validations locally before creating PRs.
+
+---
+
+## 📜 License & Conduct
+
+- This project is released under the **MIT License**. See `LICENSE`.
+- All contributors must adhere to the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+---
+
+> This repo is modern, open, and made to grow—thank you for helping make metadata shine! Great to go under the hood? Try adding a new service—you’re in the driver’s seat!
