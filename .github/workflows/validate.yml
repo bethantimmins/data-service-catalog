@@ -1,11 +1,19 @@
 name: Validate services (schema + build)
-
 on:
-  pull_request:
-    branches: [ main ]
   push:
-    branches: [ main ]
-  workflow_dispatch: {}
+    paths:
+      - "services/**/*.yaml"
+      - "services/**/*.yml"
+      - "schemas/**"
+      - "tools/**"
+      - "scripts/**"
+  pull_request:
+    paths:
+      - "services/**/*.yaml"
+      - "services/**/*.yml"
+      - "schemas/**"
+      - "tools/**"
+      - "scripts/**"
 
 permissions:
   contents: read
