@@ -3,15 +3,16 @@ name: Build & publish catalog.json for Pages
 on:
   workflow_dispatch:
   push:
+    branches: [ main ]
     paths:
-      - "services/**"
-      - "schemas/**"
+      - "services/**.yml"
       - "scripts/**"
       - "tools/**"
+      - "schemas/**"
       - ".github/workflows/publish-catalog.yml"
 
 permissions:
-  contents: write   # <-- allows the workflow to push commits
+  contents: write     # <-- allow commits from GITHUB_TOKEN
 
 jobs:
   build:
@@ -22,6 +23,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: true   # <-- keep credentials for push
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -55,5 +57,5 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "chore: update catalog.json from services/*"
-            git push
+            git push origin HEAD:main    # <-- explicit push target
           fi
