@@ -1,0 +1,11 @@
+# ❌ Example of a *bad* service definition
+# What's wrong here (examples):
+# - Missing required 'name'
+# - 'status' uses an invalid value (should match schema)
+# - 'tags' should be a list, not a single string
+# - Unknown fields ('random_field') that aren't in the schema
+title: Orders Service
+description: Just a test with missing fields and wrong types
+status: live-instead-of-production
+tags: orders  # should be a list: [orders]
+random_field: foo
