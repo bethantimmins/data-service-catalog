@@ -1,6 +1,13 @@
 [![Validate services (schema + build)](https://github.com/bethantimmins/data-service-catalog/actions/workflows/validate.yml/badge.svg)](https://github.com/bethantimmins/data-service-catalog/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+<p align="left">
+  <a href="https://bethantimmins.github.io/data-service-catalog/" target="_blank">
+    <img src="https://img.shields.io/badge/View%20the%20Catalog-Live%20Site-2563EB?style=for-the-badge&logo=githubpages&logoColor=white" alt="View the Catalog">
+  </a>
+</p>
+
+
 
 # Data Service Catalog (Open Source Starter)
 
