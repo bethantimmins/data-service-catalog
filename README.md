@@ -56,7 +56,26 @@ scripts/            # Python logic behind validation and generation
 ```
 
 ---
+## 🤝 Contributing
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute, add/edit services, and validate your changes.
+
+We also provide structured templates to make contributing smoother:
+
+- 🐞 [Bug Report](.github/ISSUE_TEMPLATE/bug_report.md) → for reporting reproducible issues
+- ✨ [Feature Request](.github/ISSUE_TEMPLATE/feature_request.md) → for proposing new ideas or improvements
+- ❓ [Question](.github/ISSUE_TEMPLATE/question.md) → for asking clarifying questions
+- 📥 [Pull Request Template](.github/pull_request_template.md) → used automatically when opening a PR
+
+Please follow these to help us keep contributions clear and consistent.
+
+---
+## 🔐 Security
+
+If you find a security vulnerability, please review our [SECURITY.md](SECURITY.md) for how to report it responsibly.  
+⚠️ Do **not** open a public GitHub issue for security reports.
+
+---
 ## 🔑 For Maintainers
 
 - **Update `catalog.schema.json`** when adding or changing metadata fields.
