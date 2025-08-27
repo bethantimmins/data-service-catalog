@@ -22,7 +22,7 @@
   <script>
     async function init(){
       try {
-        const res = await fetch('../docs/catalog.json');
+        const res = await fetch('../catalog.json');
         const data = await res.json();
         const app = document.getElementById('app');
         app.innerHTML = '';
@@ -39,7 +39,7 @@
           app.appendChild(card);
         });
       } catch(e){
-        document.getElementById('app').textContent = 'Could not load catalog.json. Run build first.';
+        document.getElementById('app').textContent ='Could not load docs/catalog.json. Make sure it exists, then commit & push.';
       }
     }
     init();
