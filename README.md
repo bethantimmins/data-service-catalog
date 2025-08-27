@@ -1,4 +1,6 @@
 [![Validate services (schema + build)](https://github.com/bethantimmins/data-service-catalog/actions/workflows/validate.yml/badge.svg)](https://github.com/bethantimmins/data-service-catalog/actions/workflows/validate.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 
 # Data Service Catalog (Open Source Starter)
 
