@@ -1,0 +1,23 @@
+name: Marketing Events Lake
+description: Curated analytics-ready table for web/app events (sessions, campaigns, attribution).
+owner: Marketing Analytics
+status: Active
+update_frequency: daily
+access: internal
+tags: [marketing, events, analytics, curated]
+
+warehouse:
+  table: analytics.marketing_events
+  partition_by: event_date
+  cluster_by: [user_id]
+
+lineage:
+  sources:
+    - web_tracking_raw
+    - mobile_events_raw
+
+data_quality:
+  freshness_slo: "Available by 07:00 UTC next day"
+  validations:
+    - "event_timestamp not null"
+    - "campaign_id in dim_campaigns"
