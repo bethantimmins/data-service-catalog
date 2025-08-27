@@ -1,23 +1,29 @@
 name: Marketing Events Lake
-description: Curated analytics-ready table for web/app events (sessions, campaigns, attribution).
 owner: Marketing Analytics
 status: Active
+access:
+  - internal
 update_frequency: daily
-access: internal
+sensitivity: Internal
+sla: "Available by 07:00 UTC next day"
+
+description: Curated analytics-ready table for web/app events (sessions, campaigns, attribution).
 tags: [marketing, events, analytics, curated]
 
-warehouse:
-  table: analytics.marketing_events
-  partition_by: event_date
-  cluster_by: [user_id]
+business_purpose: Attribution and funnel analytics for campaign performance.
 
-lineage:
-  sources:
-    - web_tracking_raw
-    - mobile_events_raw
+quality:
+  freshness_sla_min: 420    # 7 hours
+  completeness_target_pct: 98.5
 
-data_quality:
-  freshness_slo: "Available by 07:00 UTC next day"
-  validations:
-    - "event_timestamp not null"
-    - "campaign_id in dim_campaigns"
+kpis:
+  - "Attribution join success ≥ 98%"
+  - "Event timestamp completeness ≥ 99.5%"
+
+sources:
+  - web_tracking_raw
+  - mobile_events_raw
+
+monitoring:
+  - "Alert: Daily load missing by 08:00 UTC"
+support: "marketing-analytics@example.org"
