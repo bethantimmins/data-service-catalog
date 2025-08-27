@@ -22,7 +22,7 @@
   <script>
     async function init(){
       try {
-        const res = await fetch('../catalog.json');
+        const res = await fetch('./catalog.json');
         const data = await res.json();
         const app = document.getElementById('app');
         app.innerHTML = '';
