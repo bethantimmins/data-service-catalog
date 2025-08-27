@@ -1,6 +1,6 @@
 [
   {
-    "name": "Customer Orders Service",
+    "name": "Customer Orders",
     "description": "Provides access to customer purchase history for analytics and apps.",
     "owner": "Data Platform Team",
     "status": "Active",
