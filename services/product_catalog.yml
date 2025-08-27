@@ -1,0 +1,25 @@
+name: Product Catalog Service
+description: Central source of truth for product data (names, categories, pricing, availability).
+owner: Data Platform Team
+status: Active
+update_frequency: hourly
+access: internal
+tags: [product, catalog, api, curated]
+
+documentation: https://example.org/docs/product-catalog
+source_repo: https://github.com/example/product-catalog
+contact: data-platform@example.org
+
+endpoints:
+  - type: REST
+    url: https://api.example.org/products
+    auth: OAuth2
+  - type: Events
+    topic: kafka://events/products.v1
+
+data_quality:
+  freshness_slo: "≤ 60 minutes"
+  completeness: "≥ 99% non-null on id, name, price"
+retention:
+  policy: keep-current
+  notes: Historical snapshots stored in lakehouse partitioned by day
