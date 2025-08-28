@@ -9,11 +9,7 @@ on:
       - "scripts/**"
   pull_request:
     branches: [ main ]
-    paths:
-      - "services/**"
-      - "schemas/**"
-      - "tools/**"
-      - "scripts/**"
+  
   workflow_dispatch:
 
 permissions:
