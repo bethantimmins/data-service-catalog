@@ -1,4 +1,4 @@
-name: Validate services (schema + build)   # <- must match the required check
+name: Validate services (schema + build)
 
 on:
   push:
@@ -7,13 +7,17 @@ on:
       - "schemas/**"
       - "tools/**"
       - "scripts/**"
+      - "docs/catalog.json"
   pull_request:
     branches: [ main ]
-  
   workflow_dispatch:
 
 permissions:
   contents: read
+  checks: write      
+  statuses: write      
+  pull-requests: write # <-- safe; lets the job update PR metadata if needed
+
 
 jobs:
   validate:
