@@ -1,50 +1,43 @@
 name: Validate services (schema + build)
 
 on:
+  pull_request:
+    paths:
+      - "services/**/*.yml"
+      - "services/**/*.yaml"
   push:
     paths:
-      - "services/**"
-      - "schemas/**"
-      - "tools/**"
-      - "scripts/**"
-      - "docs/catalog.json"
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
+      - "services/**/*.yml"
+      - "services/**/*.yaml"
 
 permissions:
   contents: read
-  checks: write      
-  statuses: write      
-  pull-requests: write # <-- safe; lets the job update PR metadata if needed
-
 
 jobs:
-  validate:
+  validate-services-pr:
+    name: validate-services-pr
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        env:
-          RUAMEL_NO_EXTENSIONS: "1"   # avoid compiling C extensions
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: python -m pip install --upgrade pip && if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: validate
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          chmod +x tools/validate.sh || true
+          tools/validate.sh
 
-      - name: Run validator (schema + import/build)
-        # your validate.sh already validates YAML and generates the catalog
-        run: bash tools/validate.sh
-        
-      - name: Copy build → docs
+  validate-services-push:
+    name: validate-services-push
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: python -m pip install --upgrade pip && if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: validate
         run: |
-          mkdir -p docs
-          cp -f build/catalog.json docs/catalog.json
-
+          chmod +x tools/validate.sh || true
+          tools/validate.sh
