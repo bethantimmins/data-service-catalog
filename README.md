@@ -1,136 +1,182 @@
-[![Validate services (schema + build)](https://github.com/bethantimmins/data-service-catalog/actions/workflows/validate.yml/badge.svg)](https://github.com/bethantimmins/data-service-catalog/actions/workflows/validate.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+# Data Service Catalog
 
-<p align="left">
-  <a href="https://bethantimmins.github.io/data-service-catalog/" target="_blank">
-    <img src="https://img.shields.io/badge/View%20the%20Catalog-Live%20Site-2563EB?style=for-the-badge&logo=githubpages&logoColor=white" alt="View the Catalog">
-  </a>
-</p>
+[![Validate services](https://github.com/bethantimmins/data-service-catalog/actions/workflows/validate.yml/badge.svg)](https://github.com/bethantimmins/data-service-catalog/actions/workflows/validate.yml)
+[![Publish catalog](https://github.com/bethantimmins/data-service-catalog/actions/workflows/publish-catalog.yml/badge.svg)](https://github.com/bethantimmins/data-service-catalog/actions/workflows/publish-catalog.yml)
 
+A simple, lightweight service catalog for data teams.  
+Service definitions live in YAML, get validated, and are published to a JSON file served on GitHub Pages.
 
-
-# Data Service Catalog (Open Source Starter)
-
-A curated, open-source **Data Service Catalog** built with code-first metadata, automatic validation, and a lightweight web viewer.
+👉 Live site: [bethantimmins.github.io/data-service-catalog](https://bethantimmins.github.io/data-service-catalog/)
 
 ---
 
-## 📖 About
+## 👩‍💻 For Users (Fork & Run)
 
-This repository helps teams build and maintain a consistent, discoverable catalog of data services. Each service is described in **YAML**, validated by schema, and surfaced via a static site hosted on GitHub Pages.
+Want to run your own catalog?
 
-Think of it as a **self-updating directory** of your organization's data services—keep it accurate and accessible with minimal effort.
+1. **Fork this repository** into your own GitHub account.  
+2. Add your service YAMLs under `services/`.  
+3. Push changes to your fork.  
+   - GitHub Actions will validate your YAML and publish `docs/catalog.json`.  
+   - Enable GitHub Pages on your fork → you’ll get your own live catalog site.  
 
 ---
 
-## 🚀 Quick Start (for Contributors)
+## 🤝 For Contributors (Improving the project)
 
-### 1. Add or update a service
-Copy and customize a file from `services/`, e.g.:
+This repository also serves as a reference/example for building catalogs.
 
-```bash
-cp services/customer_orders.yml services/my_new_service.yml
+- Example services in `services/` are illustrative — they are not meant to be a canonical source.  
+- Contributions welcome: schema changes, tooling improvements, docs, fixes.  
+- Workflow for contributing:  
+  1. Create a feature branch from `main`.  
+  2. Add/update files (schemas, tools, docs, example YAMLs).  
+  3. Open a Pull Request.  
+- Do **not** manually edit `docs/catalog.json`. Automation handles that.  
+- See also: [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and issue/PR templates under `.github/`.  
+
+---
+
+## 🛠 For Maintainers (Admins of this repo)
+
+Maintainers keep the demo repo healthy:
+
+- `main` is protected by a ruleset requiring:  
+  - `validate-services-pr` (schema validation + build on PRs)  
+  - `publish-catalog-pr` (catalog publishing workflow on PRs)  
+- Every change goes through two PRs:  
+  1. A contributor PR (services/schema/docs).  
+  2. A bot PR (`chore: publish updated catalog.json`) which syncs `docs/catalog.json`.  
+- Merge both for the Pages site to stay current.  
+- Housekeeping:  
+  - Delete merged branches.  
+  - Keep GitHub Pages enabled.  
+  - Watch for bot PRs and merge them once checks pass.  
+
+---
+
+## 🚀 Quick Start (Local Dev)
+
+For contributors and maintainers:
+
+1. **Install dependencies**  
+   ```bash
+   python -m pip install -r requirements.txt
+   ```
+
+2. **Run validation locally**  
+   ```bash
+   bash tools/validate.sh
+   ```
+
+   - Validates YAML against `schemas/service.schema.json`.  
+   - Builds `build/catalog.json`.  
+
+CI will always run validation, but local runs help debug faster.
+
+---
+
+## 🧭 How it Works
+
+1. Service YAML files live in `services/`  
+2. They are validated against `schemas/service.schema.json`  
+3. A JSON catalog is built under `build/catalog.json`  
+4. CI copies it to `docs/catalog.json` (via **publish-catalog** workflow)  
+5. GitHub Pages serves it at the project website  
+
+---
+
+## 🧹 Housekeeping
+
+- Feature branches are deleted once their PRs are merged.  
+- Bot PRs (`chore: publish updated catalog.json`) are expected → merge them.  
+- If validation fails, run `bash tools/validate.sh` locally to debug.  
+
+---
+
+## 📂 Repo Structure
+
+```
+services/          # Service YAML definitions
+schemas/           # JSON Schema for validation
+docs/              # Published JSON catalog + Pages site
+tools/             # Validation scripts
+.github/workflows  # CI workflows (validate + publish)
+.github/ISSUE_TEMPLATE/  # GitHub issue templates
+.github/PULL_REQUEST_TEMPLATE.md # PR template
+SECURITY.md        # Security policy
+CONTRIBUTING.md    # Contribution guidelines
 ```
 
-Update fields like `name`, `description`, `owner`, `status`, `access`, `tags`, and anything else relevant.
+---
 
-### 2. Run validations (optional but highly recommended)
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-export RUAMEL_NO_EXTENSIONS=1
-pip install -r requirements.txt
-./tools/validate.sh
-python3 -m http.server 8000  # then open http://localhost:8000/docs/
-```
-
-### 3. Push changes & open a Pull Request
-
-- Create a PR against `main`.
-- The **Validate services** workflow will run automatically.
-- Once it passes, you’re good to merge!
 
 ---
 
-## 📂 Project Structure
+## 🔄 Workflow Overview
 
 ```
-services/           # Service-specific YAML definitions
-catalog.schema.json # Validation schema for services
-tools/validate.sh   # Runs validation + builds catalog.json
-build/catalog.json  # Generated metadata (do not edit by hand)
-docs/               # Serves as the GitHub Pages site
-scripts/            # Python logic behind validation and generation
+┌──────────────┐
+│  services/   │   (YAML definitions)
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│   Validate   │   (validate-services-pr job)
+│   schema +   │
+│   build      │
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│   Build      │   (catalog.json generated)
+│   catalog    │
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│  Publish     │   (publish-catalog-pr job)
+│  docs/       │
+│  catalog.json│
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│   GitHub     │   (Pages site auto-updates)
+│   Pages site │
+└──────────────┘
 ```
----
-## 🧭 How it works
-
-This repo turns simple YAML files into a browsable website of services.
-
-1. You add or edit service files in `services/*.yaml`
-2. We validate them against `schemas/catalog.schema.json`
-3. We generate `build/catalog.json`
-4. CI copies it to `docs/catalog.json`
-5. GitHub Pages serves it at the project website
-
-```text
-YAML (services/*.yaml)
-        └─ validate (schemas/catalog.schema.json)
-                └─ build → build/catalog.json
-                        └─ copy → docs/catalog.json
-                                └─ GitHub Pages site (browse/search)
-```
----
-## 🤝 Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute, add/edit services, and validate your changes.
-
-We also provide structured templates to make contributing smoother:
-
-- 🐞 [Bug Report](.github/ISSUE_TEMPLATE/bug_report.md) → for reporting reproducible issues
-- ✨ [Feature Request](.github/ISSUE_TEMPLATE/feature_request.md) → for proposing new ideas or improvements
-- ❓ [Question](.github/ISSUE_TEMPLATE/question.md) → for asking clarifying questions
-- 📥 [Pull Request Template](.github/pull_request_template.md) → used automatically when opening a PR
-
-Please follow these to help us keep contributions clear and consistent.
-
----
-## 🧪 Examples
-
-New here? Start by looking at these examples:
-
-- **Good example** → [examples/good_service.yaml](examples/good_service.yaml)
-- **Bad example** → [examples/bad_service.yaml](examples/bad_service.yaml)
-
-Use the *good* example as a template for creating new service files.  
-Compare it with the *bad* example to help spot common mistakes!
-
-**How to add a new service**
-1. Copy `examples/good_service.yaml` into the `services/` folder and rename it (e.g. `services/my-service.yaml`).
-2. Fill in the fields (making sure they match the allowed schema values).
-3. Open a Pull Request—your CI will automatically validate your file before it goes live!
-
----
-## 🔐 Security
-
-If you find a security vulnerability, please review our [SECURITY.md](SECURITY.md) for how to report it responsibly.  
-⚠️ Do **not** open a public GitHub issue for security reports.
-
----
-## 🔑 For Maintainers
-
-- **Update `catalog.schema.json`** when adding or changing metadata fields.
-- **Review PRs carefully**, ensuring metadata stays consistent and validation is green.
-- **Encourage contributors** to run validations locally before creating PRs.
 
 ---
 
-## 📜 License & Conduct
+## 🛠 Troubleshooting
 
-- This project is released under the **MIT License**. See `LICENSE`.
-- All contributors must adhere to the [Code of Conduct](CODE_OF_CONDUCT.md).
+- **PR shows “Expected — waiting for status to be reported”**  
+  - Ruleset requires a stale check.  
+  - Fix: Settings → Rulesets → Main branch protections → remove stale checks → re-add live job names (`validate-services-pr`, `publish-catalog-pr`).  
+
+- **Bot PR (`chore: publish updated catalog.json`) doesn’t appear**  
+  - Ensure the change touched `services/*.yml`.  
+  - Check `GH_BOT_TOKEN` exists in repo secrets.  
+  - If missing, manually re-run **Publish catalog** workflow in Actions.  
+
+- **Catalog PR stuck because branch is behind main**  
+  - Open the bot PR → click **Update branch** (or “Bring branch up to date”).  
+  - Rerun checks.  
+
+- **Validation fails**  
+  - Run locally with:  
+    ```bash
+    bash tools/validate.sh
+    ```  
+  - Fix YAML errors and push again.  
 
 ---
 
-> This repo is modern, open, and made to grow—thank you for helping make metadata shine! Great to go under the hood? Try adding a new service—you’re in the driver’s seat!
+## 🙌 Contributing
+
+- Fork for your own use.  
+- PRs welcome for improvements to schema, docs, or tooling.  
+- Read [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.  
+- Read [SECURITY.md](SECURITY.md) for vulnerability reporting.  
