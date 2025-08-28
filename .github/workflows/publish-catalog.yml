@@ -1,13 +1,11 @@
 name: Build & publish catalog.json for Pages
 
 on:
-  # still allows you to run it manually from the Actions tab
   workflow_dispatch:
-  # run whenever a service YAML changes, via PR only
-  pull_request:
+  push:
     paths:
-      - "services/**/*.yaml"
       - "services/**/*.yml"
+      - "services/**/*.yaml"
 
 permissions:
   contents: write
@@ -18,43 +16,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  publish-catalog-pr:
+    name: publish-catalog-pr
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install dependencies
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Install deps
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
       - name: Validate & build (build/catalog.json)
         run: |
           chmod +x tools/validate.sh || true
           tools/validate.sh
-
       - name: Copy build → docs
         run: |
           mkdir -p docs
           cp -f build/catalog.json docs/catalog.json
-
       - name: Open PR with updated catalog.json
         id: cpr
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GH_BOT_TOKEN }}   # <-- Bot token required
-          commit-message: "chore: update docs/catalog.json from services/*"
-          branch: auto/catalog-update
+          token: ${{ secrets.GH_BOT_TOKEN }}
           base: main
+          branch: auto/catalog-update
+          commit-message: "chore: update docs/catalog.json from services/*"
           title: "chore: publish updated catalog.json"
           body: |
             Auto-generated PR updating **docs/catalog.json** from files in `services/`.
@@ -63,4 +52,4 @@ jobs:
             docs/catalog.json
           delete-branch: true
           labels: automated
-          branch-suffix: timestamp
+          update-branch: true
