@@ -1,4 +1,4 @@
-name: Validate services
+name: Validate services (schema + build)   # <- must match the required check
 
 on:
   push:
