@@ -52,6 +52,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v7
         with:
+          token: ${{ secrets.GH_BOT_TOKEN }}   # <-- ADD THIS LINE
           commit-message: "chore: update docs/catalog.json from services/*"
           branch: auto/catalog-update
           title: "chore: publish updated catalog.json"
@@ -62,7 +63,7 @@ jobs:
             docs/catalog.json
           delete-branch: true
           labels: automated
-          update-branch: true        # <-- keep PR branch up to date with main
+          update-branch: true
 
       - name: Enable auto-merge on PR
         if: steps.cpr.outputs.pull-request-number != ''
