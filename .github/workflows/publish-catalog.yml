@@ -54,6 +54,7 @@ jobs:
           token: ${{ secrets.GH_BOT_TOKEN }}   # <-- Bot token required
           commit-message: "chore: update docs/catalog.json from services/*"
           branch: auto/catalog-update
+          base: main
           title: "chore: publish updated catalog.json"
           body: |
             Auto-generated PR updating **docs/catalog.json** from files in `services/`.
