@@ -7,7 +7,7 @@ update_frequency: daily
 sensitivity: Internal
 sla: "Available by 07:00 UTC next day"
 
-description: Curated analytics-ready table for web/app events (sessions, campaigns, attribution).
+description: Curated analytics-ready table for web/app events (sessions, campaigns, attribution) Test
 tags: [marketing, events, analytics, curated]
 
 business_purpose: Attribution and funnel analytics for campaign performance.
