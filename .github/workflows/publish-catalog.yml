@@ -1,15 +1,14 @@
 name: Build & publish catalog.json for Pages
 
 on:
-  # allow manual runs
+  # still allows you to run it manually from the Actions tab
   workflow_dispatch:
-  # auto-run whenever service YAML changes
-  push:
+  # run whenever a service YAML changes, via PR only
+  pull_request:
     paths:
       - "services/**/*.yaml"
       - "services/**/*.yml"
 
-# this workflow *only* opens/updates a PR; it never pushes to main directly
 permissions:
   contents: write
   pull-requests: write
@@ -21,6 +20,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -42,8 +42,6 @@ jobs:
           chmod +x tools/validate.sh || true
           tools/validate.sh
 
-      # stage the generated file into the working tree;
-      # PR will include only docs/catalog.json
       - name: Copy build → docs
         run: |
           mkdir -p docs
@@ -53,9 +51,9 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GH_BOT_TOKEN }}   # use your PAT so PR workflows fire
-          branch: auto/catalog-update
+          token: ${{ secrets.GH_BOT_TOKEN }}   # <-- Bot token required
           commit-message: "chore: update docs/catalog.json from services/*"
+          branch: auto/catalog-update
           title: "chore: publish updated catalog.json"
           body: |
             Auto-generated PR updating **docs/catalog.json** from files in `services/`.
@@ -64,15 +62,4 @@ jobs:
             docs/catalog.json
           delete-branch: true
           labels: automated
-          update-branch: true
-          # optional: skip PR if nothing changed
-          # push-to-fork: false
-          # signoff: false
-
-      - name: Enable auto-merge on PR
-        if: steps.cpr.outputs.pull-request-number != ''
-        uses: peter-evans/enable-pull-request-automerge@v3
-        with:
-          token: ${{ secrets.GH_BOT_TOKEN }}     # use PAT here too
-          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
-          merge-method: squash                   # or 'merge' if you prefer
+          branch-suffix: timestamp
