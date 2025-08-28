@@ -50,7 +50,7 @@
     "update_frequency": "daily",
     "sensitivity": "Internal",
     "sla": "Available by 07:00 UTC next day",
-    "description": "Curated analytics-ready table for web/app marketing events (sessions, campaigns, attribution).",
+    "description": "Test Curated analytics-ready table for web/app marketing events (sessions, campaigns, attribution).",
     "tags": [
       "marketing",
       "events",
